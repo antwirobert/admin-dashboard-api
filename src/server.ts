@@ -1,0 +1,25 @@
+import dotenv from "dotenv";
+dotenv.config();
+
+import express from "express";
+import cors from "cors";
+import orderRoutes from "./routes/orders";
+
+const app = express();
+const PORT = process.env.PORT;
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  }),
+);
+
+app.use(express.json());
+
+app.use("/api/orders", orderRoutes);
+
+app.listen(PORT, () =>
+  console.log(`Server is running on port http://localhost:${PORT}`),
+);
