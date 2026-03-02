@@ -1,7 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
   pgTable,
-  uuid,
   varchar,
   timestamp,
   numeric,
@@ -38,8 +37,8 @@ export const orderStatusEnum = pgEnum("order_status", [
 /* ----------------------------- */
 /* Users                         */
 /* ----------------------------- */
-export const users = pgTable("users", {
-  id: uuid("id").primaryKey().defaultRandom(),
+export const user = pgTable("user", {
+  id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull().default(false),
@@ -53,10 +52,10 @@ export const users = pgTable("users", {
 export const session = pgTable(
   "session",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
-    userId: uuid("user_id")
+    id: text("id").primaryKey(),
+    userId: text("user_id")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     token: text("token").notNull(),
     expiresAt: timestamp("expires_at").notNull(),
     ipAddress: text("ip_address"),
@@ -75,10 +74,10 @@ export const session = pgTable(
 export const account = pgTable(
   "account",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
-    userId: uuid("user_id")
+    id: text("id").primaryKey(),
+    userId: text("user_id")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     accountId: text("account_id").notNull(),
     providerId: text("provider_id").notNull(),
     accessToken: text("access_token"),
@@ -105,7 +104,7 @@ export const account = pgTable(
 export const verification = pgTable(
   "verification",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
+    id: text("id").primaryKey(),
     identifier: text("identifier").notNull(),
     value: text("value").notNull(),
     expiresAt: timestamp("expires_at").notNull(),
@@ -120,7 +119,7 @@ export const verification = pgTable(
 /* Customers                     */
 /* ----------------------------- */
 export const customers = pgTable("customers", {
-  id: uuid("id").primaryKey().defaultRandom(),
+  id: text("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
   email: varchar("email", { length: 150 }),
   ...timestamps,
@@ -132,8 +131,8 @@ export const customers = pgTable("customers", {
 export const orders = pgTable(
   "orders",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
-    customerId: uuid("customer_id")
+    id: text("id").primaryKey(),
+    customerId: text("customer_id")
       .notNull()
       .references(() => customers.id, { onDelete: "cascade" }),
     status: orderStatusEnum("status").notNull().default("pending"),
@@ -149,10 +148,10 @@ export const orders = pgTable(
 /* Activity Logs                 */
 /* ----------------------------- */
 export const activityLogs = pgTable("activity_logs", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id")
+  id: text("id").primaryKey(),
+  userId: text("user_id")
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+    .references(() => user.id, { onDelete: "cascade" }),
   action: varchar("action", { length: 255 }).notNull(),
   entity: varchar("entity", { length: 50 }).notNull(),
   entityId: text("entity_id").notNull(),
@@ -162,23 +161,23 @@ export const activityLogs = pgTable("activity_logs", {
 /* ----------------------------- */
 /* Relations                     */
 /* ----------------------------- */
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
   activityLogs: many(activityLogs),
 }));
 
 export const sessionsRelations = relations(session, ({ one }) => ({
-  user: one(users, {
+  user: one(user, {
     fields: [session.userId],
-    references: [users.id],
+    references: [user.id],
   }),
 }));
 
 export const accountsRelations = relations(account, ({ one }) => ({
-  user: one(users, {
+  user: one(user, {
     fields: [account.userId],
-    references: [users.id],
+    references: [user.id],
   }),
 }));
 
@@ -194,17 +193,17 @@ export const ordersRelations = relations(orders, ({ one }) => ({
 }));
 
 export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
-  user: one(users, {
+  user: one(user, {
     fields: [activityLogs.userId],
-    references: [users.id],
+    references: [user.id],
   }),
 }));
 
 /* ----------------------------- */
 /* Types                         */
 /* ----------------------------- */
-export type User = typeof users.$inferSelect;
-export type NewUser = typeof users.$inferInsert;
+export type User = typeof user.$inferSelect;
+export type NewUser = typeof user.$inferInsert;
 
 export type Session = typeof session.$inferSelect;
 export type NewSession = typeof session.$inferInsert;

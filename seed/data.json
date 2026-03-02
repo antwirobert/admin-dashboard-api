@@ -1,28 +1,28 @@
 {
   "users": [
     {
-      "id": "00000000-0000-4000-a000-000000000001",
+      "id": "user-001",
       "name": "Kwame Asare",
       "email": "kwame.admin@orderflow.local",
       "role": "admin",
       "password": "Admin#1234"
     },
     {
-      "id": "00000000-0000-4000-a000-000000000002",
+      "id": "user-002",
       "name": "Ama Serwaa",
       "email": "ama.staff@orderflow.local",
       "role": "staff",
       "password": "Staff#1232"
     },
     {
-      "id": "00000000-0000-4000-a000-000000000003",
+      "id": "user-003",
       "name": "Kofi Mensah",
       "email": "kofi.staff@orderflow.local",
       "role": "staff",
       "password": "Staff#1233"
     },
     {
-      "id": "00000000-0000-4000-a000-000000000004",
+      "id": "user-004",
       "name": "Efua Osei",
       "email": "efua.admin@orderflow.local",
       "role": "staff",
@@ -32,27 +32,27 @@
 
   "customers": [
     {
-      "id": "11111111-1111-4000-b111-000000000001",
+      "id": "cust-001",
       "name": "Adwoa Fashion Boutique",
       "email": "adwoa.fashion@gmail.com"
     },
     {
-      "id": "11111111-1111-4000-b111-000000000002",
+      "id": "cust-002",
       "name": "Yaw Electronics & Phones",
       "email": "yawgadgets@yahoo.com"
     },
     {
-      "id": "11111111-1111-4000-b111-000000000003",
+      "id": "cust-003",
       "name": "Mama Dee Catering Services",
       "email": null
     },
     {
-      "id": "11111111-1111-4000-b111-000000000004",
+      "id": "cust-004",
       "name": "Bright & Sons Construction",
       "email": "bright.construction@outlook.com"
     },
     {
-      "id": "11111111-1111-4000-b111-000000000005",
+      "id": "cust-005",
       "name": "Nana Ama Mini Mart",
       "email": "nanaamamart@gmail.com"
     }
@@ -60,38 +60,38 @@
 
   "orders": [
     {
-      "id": "22222222-2222-4000-c222-000000000001",
-      "customerId": "11111111-1111-4000-b111-000000000001",
+      "id": "order-001",
+      "customerId": "cust-001",
       "status": "completed",
       "totalAmount": 1450.0
     },
     {
-      "id": "22222222-2222-4000-c222-000000000002",
-      "customerId": "11111111-1111-4000-b111-000000000002",
+      "id": "order-002",
+      "customerId": "cust-002",
       "status": "processing",
       "totalAmount": 3200.5
     },
     {
-      "id": "22222222-2222-4000-c222-000000000003",
-      "customerId": "11111111-1111-4000-b111-000000000003",
+      "id": "order-003",
+      "customerId": "cust-003",
       "status": "pending",
       "totalAmount": 850.0
     },
     {
-      "id": "22222222-2222-4000-c222-000000000004",
-      "customerId": "11111111-1111-4000-b111-000000000001",
+      "id": "order-004",
+      "customerId": "cust-001",
       "status": "cancelled",
       "totalAmount": 2200.75
     },
     {
-      "id": "22222222-2222-4000-c222-000000000005",
-      "customerId": "11111111-1111-4000-b111-000000000004",
+      "id": "order-005",
+      "customerId": "cust-004",
       "status": "completed",
       "totalAmount": 4800.0
     },
     {
-      "id": "22222222-2222-4000-c222-000000000006",
-      "customerId": "11111111-1111-4000-b111-000000000005",
+      "id": "order-006",
+      "customerId": "cust-005",
       "status": "processing",
       "totalAmount": 675.25
     }
@@ -99,46 +99,46 @@
 
   "activityLogs": [
     {
-      "id": "33333333-3333-4000-d333-000000000001",
-      "userId": "00000000-0000-4000-a000-000000000001",
+      "id": "log-001",
+      "userId": "user-001",
       "action": "order_created",
       "entity": "order",
-      "entityId": "22222222-2222-4000-c222-000000000001"
+      "entityId": "order-001"
     },
     {
-      "id": "33333333-3333-4000-d333-000000000002",
-      "userId": "00000000-0000-4000-a000-000000000002",
+      "id": "log-002",
+      "userId": "user-002",
       "action": "order_status_updated",
       "entity": "order",
-      "entityId": "22222222-2222-4000-c222-000000000002"
+      "entityId": "order-002"
     },
     {
-      "id": "33333333-3333-4000-d333-000000000003",
-      "userId": "00000000-0000-4000-a000-000000000001",
+      "id": "log-003",
+      "userId": "user-001",
       "action": "order_cancelled",
       "entity": "order",
-      "entityId": "22222222-2222-4000-c222-000000000004"
+      "entityId": "order-004"
     },
     {
-      "id": "33333333-3333-4000-d333-000000000004",
-      "userId": "00000000-0000-4000-a000-000000000004",
+      "id": "log-004",
+      "userId": "user-004",
       "action": "user_created",
       "entity": "user",
-      "entityId": "00000000-0000-4000-a000-000000000003"
+      "entityId": "user-003"
     },
     {
-      "id": "33333333-3333-4000-d333-000000000005",
-      "userId": "00000000-0000-4000-a000-000000000002",
+      "id": "log-005",
+      "userId": "user-002",
       "action": "order_status_updated",
       "entity": "order",
-      "entityId": "22222222-2222-4000-c222-000000000005"
+      "entityId": "order-005"
     },
     {
-      "id": "33333333-3333-4000-d333-000000000006",
-      "userId": "00000000-0000-4000-a000-000000000001",
+      "id": "log-006",
+      "userId": "user-001",
       "action": "order_created",
       "entity": "order",
-      "entityId": "22222222-2222-4000-c222-000000000006"
+      "entityId": "order-006"
     }
   ]
 }

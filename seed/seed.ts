@@ -9,7 +9,7 @@ import {
   customers,
   orders,
   session,
-  users,
+  user,
 } from "../src/db/schema";
 
 type SeedUser = {
@@ -65,11 +65,11 @@ const seed = async () => {
   await db.delete(customers);
   await db.delete(session);
   await db.delete(account);
-  await db.delete(users);
+  await db.delete(user);
 
   if (data.users.length) {
     await db
-      .insert(users)
+      .insert(user)
       .values(
         data.users.map((seedUser) => ({
           id: seedUser.id,
@@ -79,12 +79,13 @@ const seed = async () => {
           role: seedUser.role,
         })),
       )
-      .onConflictDoNothing({ target: users.id });
+      .onConflictDoNothing({ target: user.id });
 
     await db
       .insert(account)
       .values(
         data.users.map((seedUser) => ({
+          id: `acc_${seedUser.id}`,
           userId: seedUser.id,
           accountId: seedUser.email,
           providerId: "credentials",
