@@ -1,14 +1,22 @@
 import { Router } from "express";
 import { db } from "../db";
 import { activityLogs, orders } from "../db/schema";
-import { desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, gte, ilike, lte, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
+import { format } from "date-fns";
 
 const router = Router();
 
 router.get("/", async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      status,
+      startDate,
+      endDate,
+    } = req.query;
 
     const currentPage = Math.max(1, parseInt(String(page), 10) || 1);
     const limitPerPage = Math.min(
@@ -17,18 +25,37 @@ router.get("/", async (req, res) => {
     );
     const offset = (currentPage - 1) * limitPerPage;
 
-    // const filterConditions = []
+    const filterConditions = [];
 
-    // const whereClause = filterConditions.length > 0 ? and(...filterConditions) : undefined
+    if (search) {
+      filterConditions.push(ilike(orders.id, `%${search}%`));
+    }
+
+    if (status) {
+      filterConditions.push(eq(orders.status, String(status) as OrderStatus));
+    }
+
+    if (startDate) {
+      filterConditions.push(gte(orders.createdAt, new Date(String(startDate))));
+    }
+
+    if (endDate) {
+      filterConditions.push(lte(orders.createdAt, new Date(String(endDate))));
+    }
+
+    const whereClause =
+      filterConditions.length > 0 ? and(...filterConditions) : undefined;
 
     const countResult = await db
       .select({ count: sql<number>`count(*)` })
-      .from(orders);
+      .from(orders)
+      .where(whereClause);
     const totalCount = countResult[0]?.count ?? 0;
 
     const allOrders = await db
       .select()
       .from(orders)
+      .where(whereClause)
       .orderBy(desc(orders.createdAt))
       .limit(limitPerPage)
       .offset(offset);
@@ -68,6 +95,64 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/export/csv", async (req, res) => {
+  try {
+    res.setHeader("Content-Type", "text/csv; charset=utf-8");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="orders-${new Date().toISOString().split("T")[0]}.csv"`,
+    );
+
+    res.write("Order ID,Status,Total Amount,Created At\n");
+
+    const stream = await db
+      .select({
+        id: orders.id,
+        status: orders.status,
+        total_amount: orders.totalAmount,
+        created_at: orders.createdAt,
+      })
+      .from(orders)
+      .orderBy(desc(orders.createdAt))
+      .$dynamic();
+
+    const chunkSize = 1000;
+    let offset = 0;
+
+    while (true) {
+      const chunk = await db
+        .select()
+        .from(orders)
+        .limit(chunkSize)
+        .offset(offset)
+        .orderBy(desc(orders.createdAt));
+
+      if (chunk.length === 0) break;
+
+      const csvRows = chunk.map((o) =>
+        [
+          `"${o.id}"`,
+          `"${String(o.status).replace(/"/g, '""')}"`,
+          o.totalAmount,
+          `"${format(new Date(o.createdAt), "yyyy-MM-dd HH:mm:ss")}"`,
+        ].join(","),
+      );
+
+      res.write(csvRows.join("\n") + "\n");
+      offset += chunkSize;
+    }
+
+    res.end();
+  } catch (err) {
+    console.error(err);
+    if (!res.headersSent) {
+      res.status(500).json({ error: "Export failed" });
+    } else {
+      res.end();
+    }
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const { customerId, status, totalAmount } = req.body;
@@ -86,7 +171,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.patch("/:id/status", async (req, res) => {
+router.patch("/:id", async (req, res) => {
   try {
     const orderId = req.params.id;
 
