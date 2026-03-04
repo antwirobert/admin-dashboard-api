@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { db } from "../db";
-import { orders } from "../db/schema";
-import { desc, sql } from "drizzle-orm";
+import { activityLogs, orders } from "../db/schema";
+import { desc, eq, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
 
 const router = Router();
@@ -48,6 +48,26 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    const orderId = req.params.id;
+
+    if (!orderId) res.status(400).json({ error: "Invalid orderId" });
+
+    const [existingOrder] = await db
+      .select()
+      .from(orders)
+      .where(eq(orders.id, orderId));
+    if (!existingOrder)
+      res.status(404).json({ error: "Order details not found" });
+
+    res.status(200).json({ data: existingOrder });
+  } catch (e) {
+    console.error(`GET /orders/:id error: ${e}`);
+    res.status(500).json("Failed to get order details");
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const { customerId, status, totalAmount } = req.body;
@@ -63,6 +83,37 @@ router.post("/", async (req, res) => {
   } catch (e) {
     console.error(`POST /orders error: ${e}`);
     res.status(500).json("Failed to create an order");
+  }
+});
+
+router.patch("/:id/status", async (req, res) => {
+  try {
+    const orderId = req.params.id;
+
+    if (!orderId) res.status(400).json({ error: "Invalid orderId" });
+
+    const { status, userId } = req.body;
+
+    const [updatedOrder] = await db
+      .update(orders)
+      .set({ status, updatedAt: new Date() })
+      .where(eq(orders.id, orderId))
+      .returning();
+
+    if (!updatedOrder) res.status(404).json({ error: "Order not found" });
+
+    await db.insert(activityLogs).values({
+      id: nanoid(),
+      userId,
+      action: `order_status_updated`,
+      entity: "order",
+      entityId: orderId,
+    });
+
+    res.status(200).json({ data: updatedOrder });
+  } catch (e) {
+    console.error(`PATCH /orders/:id/status error: ${e}`);
+    res.status(500).json("Failed to update order status");
   }
 });
 
