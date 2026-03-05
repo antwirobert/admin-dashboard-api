@@ -3,10 +3,10 @@ dotenv.config();
 
 import express from "express";
 import cors from "cors";
-import orderRoutes from "./routes/orders";
+import orderRoutes from "./routes/orders.js";
 import { toNodeHandler } from "better-auth/node";
-import { auth } from "./lib/auth";
-import dashboardRoutes from "./routes/dashboard";
+import { auth } from "./lib/auth.js";
+import dashboardRoutes from "./routes/dashboard.js";
 
 const app = express();
 const PORT = process.env.PORT;
