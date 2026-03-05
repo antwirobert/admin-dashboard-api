@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { db } from "../db";
-import { activityLogs, orders } from "../db/schema";
+import { db } from "../db/index.js";
+import { activityLogs, orders } from "../db/schema.js";
 import { and, desc, eq, gte, ilike, lte, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { format } from "date-fns";

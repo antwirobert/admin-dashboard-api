@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { db } from "../src/db";
+import { db } from "../src/db/index.js";
 import {
   account,
   activityLogs,
@@ -10,7 +10,7 @@ import {
   orders,
   session,
   user,
-} from "../src/db/schema";
+} from "../src/db/schema.js";
 
 type SeedUser = {
   id: string;
