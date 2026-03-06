@@ -2,10 +2,10 @@
   "users": [
     {
       "id": "user-001",
-      "name": "Robert Antwi",
-      "email": "robert.admin@demo.com",
-      "role": "admin",
-      "password": "Admin#1234"
+      "name": "John Antwi",
+      "email": "john.staff@demo.com",
+      "role": "staff",
+      "password": "Staff#1234"
     },
     {
       "id": "user-002",
