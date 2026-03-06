@@ -9,20 +9,14 @@ const router = Router();
 
 router.get("/", async (req, res) => {
   try {
-    const {
-      page = 1,
-      limit = 10,
-      search,
-      status,
-      startDate,
-      endDate,
-    } = req.query;
+    const { page = 1, limit = 10, search, status } = req.query;
 
     const currentPage = Math.max(1, parseInt(String(page), 10) || 1);
     const limitPerPage = Math.min(
       Math.max(1, parseInt(String(limit), 10) || 10),
       100,
     );
+
     const offset = (currentPage - 1) * limitPerPage;
 
     const filterConditions = [];
@@ -35,14 +29,6 @@ router.get("/", async (req, res) => {
       filterConditions.push(eq(orders.status, String(status) as OrderStatus));
     }
 
-    if (startDate) {
-      filterConditions.push(gte(orders.createdAt, new Date(String(startDate))));
-    }
-
-    if (endDate) {
-      filterConditions.push(lte(orders.createdAt, new Date(String(endDate))));
-    }
-
     const whereClause =
       filterConditions.length > 0 ? and(...filterConditions) : undefined;
 
@@ -50,7 +36,7 @@ router.get("/", async (req, res) => {
       .select({ count: sql<number>`count(*)` })
       .from(orders)
       .where(whereClause);
-    const totalCount = countResult[0]?.count ?? 0;
+    const totalCount = Number(countResult[0]?.count ?? 0);
 
     const allOrders = await db
       .select()
