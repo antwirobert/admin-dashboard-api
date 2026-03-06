@@ -89,7 +89,7 @@ const seed = async () => {
             id: `acc_${seedUser.id}`,
             userId: seedUser.id,
             accountId: seedUser.email,
-            providerId: "credentials",
+            providerId: "email",
             password: await bcrypt.hash(seedUser.password, 10),
           })),
         ),
