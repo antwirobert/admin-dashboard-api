@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-
+import bcrypt from "bcryptjs";
 import { db } from "../src/db/index.js";
 import {
   account,
@@ -84,13 +84,15 @@ const seed = async () => {
     await db
       .insert(account)
       .values(
-        data.users.map((seedUser) => ({
-          id: `acc_${seedUser.id}`,
-          userId: seedUser.id,
-          accountId: seedUser.email,
-          providerId: "credentials",
-          password: seedUser.password,
-        })),
+        await Promise.all(
+          data.users.map(async (seedUser) => ({
+            id: `acc_${seedUser.id}`,
+            userId: seedUser.id,
+            accountId: seedUser.email,
+            providerId: "credentials",
+            password: await bcrypt.hash(seedUser.password, 10),
+          })),
+        ),
       )
       .onConflictDoNothing({ target: [account.providerId, account.accountId] });
   }

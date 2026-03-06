@@ -2,29 +2,22 @@
   "users": [
     {
       "id": "user-001",
-      "name": "Kwame Asare",
-      "email": "kwame.admin@orderflow.local",
+      "name": "Robert Antwi",
+      "email": "robert.admin@demo.com",
       "role": "admin",
       "password": "Admin#1234"
     },
     {
       "id": "user-002",
-      "name": "Ama Serwaa",
-      "email": "ama.staff@orderflow.local",
+      "name": "Ama Mensah",
+      "email": "ama.staff@demo.com",
       "role": "staff",
-      "password": "Staff#1232"
+      "password": "Staff#1234"
     },
     {
       "id": "user-003",
-      "name": "Kofi Mensah",
-      "email": "kofi.staff@orderflow.local",
-      "role": "staff",
-      "password": "Staff#1233"
-    },
-    {
-      "id": "user-004",
-      "name": "Efua Osei",
-      "email": "efua.admin@orderflow.local",
+      "name": "Kofi Boateng",
+      "email": "kofi.staff@demo.com",
       "role": "staff",
       "password": "Staff#1234"
     }
@@ -55,6 +48,31 @@
       "id": "cust-005",
       "name": "Nana Ama Mini Mart",
       "email": "nanaamamart@gmail.com"
+    },
+    {
+      "id": "cust-006",
+      "name": "Kojo Auto Parts",
+      "email": "kojo.autoparts@gmail.com"
+    },
+    {
+      "id": "cust-007",
+      "name": "Golden Palm Restaurant",
+      "email": "goldenpalm@gmail.com"
+    },
+    {
+      "id": "cust-008",
+      "name": "Akosua Beauty Palace",
+      "email": "akosuabeauty@gmail.com"
+    },
+    {
+      "id": "cust-009",
+      "name": "Kwesi Hardware Store",
+      "email": null
+    },
+    {
+      "id": "cust-010",
+      "name": "Tema Logistics Ltd",
+      "email": "tema.logistics@gmail.com"
     }
   ],
 
@@ -94,6 +112,91 @@
       "customerId": "cust-005",
       "status": "processing",
       "totalAmount": 675.25
+    },
+
+    {
+      "id": "order-007",
+      "customerId": "cust-006",
+      "status": "completed",
+      "totalAmount": 1500.0
+    },
+    {
+      "id": "order-008",
+      "customerId": "cust-007",
+      "status": "completed",
+      "totalAmount": 890.0
+    },
+    {
+      "id": "order-009",
+      "customerId": "cust-008",
+      "status": "processing",
+      "totalAmount": 2300.0
+    },
+    {
+      "id": "order-010",
+      "customerId": "cust-002",
+      "status": "pending",
+      "totalAmount": 410.0
+    },
+    {
+      "id": "order-011",
+      "customerId": "cust-003",
+      "status": "completed",
+      "totalAmount": 1200.0
+    },
+    {
+      "id": "order-012",
+      "customerId": "cust-009",
+      "status": "completed",
+      "totalAmount": 6700.0
+    },
+    {
+      "id": "order-013",
+      "customerId": "cust-010",
+      "status": "processing",
+      "totalAmount": 5400.0
+    },
+    {
+      "id": "order-014",
+      "customerId": "cust-004",
+      "status": "completed",
+      "totalAmount": 3100.0
+    },
+    {
+      "id": "order-015",
+      "customerId": "cust-005",
+      "status": "pending",
+      "totalAmount": 950.0
+    },
+    {
+      "id": "order-016",
+      "customerId": "cust-006",
+      "status": "completed",
+      "totalAmount": 780.0
+    },
+    {
+      "id": "order-017",
+      "customerId": "cust-007",
+      "status": "processing",
+      "totalAmount": 1650.0
+    },
+    {
+      "id": "order-018",
+      "customerId": "cust-008",
+      "status": "completed",
+      "totalAmount": 2450.0
+    },
+    {
+      "id": "order-019",
+      "customerId": "cust-010",
+      "status": "completed",
+      "totalAmount": 9100.0
+    },
+    {
+      "id": "order-020",
+      "customerId": "cust-001",
+      "status": "processing",
+      "totalAmount": 1320.0
     }
   ],
 
@@ -121,10 +224,10 @@
     },
     {
       "id": "log-004",
-      "userId": "user-004",
-      "action": "user_created",
-      "entity": "user",
-      "entityId": "user-003"
+      "userId": "user-003",
+      "action": "customer_created",
+      "entity": "customer",
+      "entityId": "cust-006"
     },
     {
       "id": "log-005",
@@ -139,6 +242,34 @@
       "action": "order_created",
       "entity": "order",
       "entityId": "order-006"
+    },
+    {
+      "id": "log-007",
+      "userId": "user-002",
+      "action": "order_created",
+      "entity": "order",
+      "entityId": "order-010"
+    },
+    {
+      "id": "log-008",
+      "userId": "user-003",
+      "action": "order_status_updated",
+      "entity": "order",
+      "entityId": "order-013"
+    },
+    {
+      "id": "log-009",
+      "userId": "user-001",
+      "action": "order_created",
+      "entity": "order",
+      "entityId": "order-018"
+    },
+    {
+      "id": "log-010",
+      "userId": "user-002",
+      "action": "customer_created",
+      "entity": "customer",
+      "entityId": "cust-010"
     }
   ]
 }
