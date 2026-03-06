@@ -42,7 +42,7 @@ router.get("/", async (req, res) => {
       .select()
       .from(orders)
       .where(whereClause)
-      .orderBy(desc(orders.createdAt))
+      .orderBy(desc(orders.updatedAt), desc(orders.createdAt))
       .limit(limitPerPage)
       .offset(offset);
 
